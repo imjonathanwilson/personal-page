@@ -7,6 +7,7 @@ resource "aws_cloudfront_distribution" "website" {
   comment             = "Jonathan Wilson 90s Website CDN"
   default_root_object = "index.html"
   price_class         = "PriceClass_100" # North America and Europe only (cheapest)
+  aliases             = var.domain_name != "" ? [var.domain_name] : []
 
   origin {
     domain_name = aws_instance.web_server.public_dns
@@ -48,7 +49,9 @@ resource "aws_cloudfront_distribution" "website" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    cloudfront_default_certificate = var.domain_name == "" ? true : false
+    acm_certificate_arn            = var.domain_name != "" ? var.acm_certificate_arn : null
+    ssl_support_method             = var.domain_name != "" ? "sni-only" : null
     minimum_protocol_version       = "TLSv1.2_2021"
   }
 

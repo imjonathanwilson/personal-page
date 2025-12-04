@@ -39,3 +39,15 @@ variable "aws_profile" {
   type        = string
   default     = null
 }
+
+variable "domain_name" {
+  description = "Custom domain name (optional - leave empty to use CloudFront domain only)"
+  type        = string
+  default     = ""
+}
+
+variable "acm_certificate_arn" {
+  description = "ACM certificate ARN for custom domain (required if domain_name is set)"
+  type        = string
+  default     = ""
+}
