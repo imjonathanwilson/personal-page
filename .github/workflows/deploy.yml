@@ -55,7 +55,15 @@ jobs:
 
       - name: Terraform Plan
         working-directory: terraform
-        run: terraform plan -out=tfplan
+        run: |
+          if [ -n "${{ secrets.DOMAIN_NAME }}" ] && [ -n "${{ secrets.ACM_CERTIFICATE_ARN }}" ]; then
+            terraform plan \
+              -var="domain_name=${{ secrets.DOMAIN_NAME }}" \
+              -var="acm_certificate_arn=${{ secrets.ACM_CERTIFICATE_ARN }}" \
+              -out=tfplan
+          else
+            terraform plan -out=tfplan
+          fi
 
       - name: Upload Terraform Plan
         uses: actions/upload-artifact@v4
@@ -101,7 +109,15 @@ jobs:
 
       - name: Terraform Apply
         working-directory: terraform
-        run: terraform apply -auto-approve tfplan
+        run: |
+          if [ -n "${{ secrets.DOMAIN_NAME }}" ] && [ -n "${{ secrets.ACM_CERTIFICATE_ARN }}" ]; then
+            terraform apply \
+              -var="domain_name=${{ secrets.DOMAIN_NAME }}" \
+              -var="acm_certificate_arn=${{ secrets.ACM_CERTIFICATE_ARN }}" \
+              -auto-approve tfplan
+          else
+            terraform apply -auto-approve tfplan
+          fi
 
       - name: Export Terraform Outputs
         working-directory: terraform

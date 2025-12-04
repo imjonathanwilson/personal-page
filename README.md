@@ -44,6 +44,12 @@ This project deploys a classic 90s-style website for Jonathan Wilson on AWS infr
    - Download and install from: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html
    - This enables Ansible to connect via SSM (no SSH keys needed!)
 
+5. **Custom Domain Configuration (Optional)**:
+   - If using a custom domain, you'll need:
+     - A domain name registered with any domain registrar
+     - An ACM certificate in the `us-east-1` region for your domain
+     - The ACM certificate ARN to add as a GitHub secret
+
 ## Deployment Steps
 
 ### Step 1: Setup Backend (S3)
@@ -209,6 +215,17 @@ To completely remove everything including state backend:
 ```bash
 aws s3 rb s3://jonathan-wilson-terraform-state --force
 ```
+
+## GitHub Actions Secrets
+
+If you're using GitHub Actions for deployment, configure these repository secrets:
+
+1. Go to your repo → Settings → Secrets and variables → Actions
+2. Add repository secrets:
+   - `AWS_ACCESS_KEY_ID`: Your AWS access key ID
+   - `AWS_SECRET_ACCESS_KEY`: Your AWS secret access key
+   - `DOMAIN_NAME`: Your domain (optional, e.g., `example.com`)
+   - `ACM_CERTIFICATE_ARN`: Your certificate ARN (optional, required if DOMAIN_NAME is set)
 
 ## Cost Estimate
 
