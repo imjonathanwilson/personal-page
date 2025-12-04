@@ -1,0 +1,3 @@
+# Ansible and dependencies for deployment
+ansible>=2.15.0
+ansible-pylibssh>=1.1.0

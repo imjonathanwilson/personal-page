@@ -131,10 +131,11 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: 'pip'
+          cache-dependency-path: 'requirements.txt'
 
       - name: Install Ansible and dependencies
         run: |
-          pip install ansible ansible-pylibssh
+          pip install -r requirements.txt
 
       - name: Install AWS Session Manager Plugin
         run: |
