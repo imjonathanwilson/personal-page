@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jonathan Wilson - Terminal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Courier New', 'monospace';
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .terminal {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .terminal-header {
+            background-color: #333;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #555;
+        }
+
+        .window-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .control-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .close { background-color: #ff5f57; }
+        .minimize { background-color: #ffbd2e; }
+        .maximize { background-color: #28c940; }
+
+        .terminal-title {
+            color: #aaa;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .terminal-body {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .info-container {
+            text-align: center;
+            max-width: 800px;
+            min-height: 700px;
+            padding: 40px;
+            background-color: rgba(0, 15, 0, 0.85); /* Darker background for better text visibility */
+            border-radius: 5px;
+        }
+
+        .terminal-prompt {
+            display: inline-block;
+            margin-right: 8px;
+            color: #0f0;
+        }
+
+        .info-content {
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        .info-content h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+        }
+
+        .info-content h2 {
+            font-size: 1.8em;
+            margin: 15px 0;
+            color: #0f0;
+        }
+
+        .info-content p {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        .contact-info {
+            margin: 15px 0 25px 0;
+            font-size: 0.95em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .contact-info a {
+            color: #0f0;
+            text-decoration: none;
+            display: block;
+        }
+
+        .contact-info a:hover {
+            color: #0ff;
+            text-decoration: underline;
+        }
+
+        .separator {
+            display: none;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 1.2em;
+            background-color: #0f0;
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .terminal-text {
+            white-space: pre;
+            text-align: left;
+        }
+
+        .command-line {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .command {
+            color: #fff;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            color: #555;
+            font-size: 0.9em;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container"></div>
+
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="window-controls">
+                <div class="control-btn close"></div>
+                <div class="control-btn minimize"></div>
+                <div class="control-btn maximize"></div>
+            </div>
+            <div class="terminal-title">jonathan-wilson@homepage:~</div>
+        </div>
+
+        <div class="terminal-body">
+            <div class="info-container">
+                <div class="command-line">
+                    <span class="terminal-prompt">> </span>
+                    <span class="command">cat about_me.txt</span>
+                    <span class="cursor"></span>
+                </div>
+
+                <div class="info-content">
+                    <h1>Jonathan Wilson</h1>
+                    <h2>Senior Site Reliability Engineer</h2>
+
+                    <div class="contact-info">
+                        <a href="https://github.com/imjonathanwilson" target="_blank">github.com/imjonathanwilson</a>
+                        <span class="separator"> | </span>
+                        <a href="https://linkedin.com/in/imjonathanwilson" target="_blank">linkedin.com/in/imjonathanwilson</a>
+                    </div>
+
+                    <p>Senior Site Reliability Engineer with deep experience automating AWS environments, improving system resilience, and supporting high-volume production workloads.</p>
+                    <p>Built scalable CI/CD pipelines and Terraform-driven infrastructure while designing real-time observability using Datadog, CloudWatch, and Grafana.</p>
+                </div>
+
+                <div class="command-line">
+                    <span class="terminal-prompt">> </span>
+                    <span class="command">ls -la projects/</span>
+                </div>
+                <div class="terminal-text">
+projects/
+├── infrastructure-automation
+├── cloud-security-tools
+├── devops-pipelines
+└── monitoring-dashboard
+                </div>
+
+                <div class="command-line">
+                    <span class="terminal-prompt">> </span>
+                    <span class="command">man skills</span>
+                </div>
+                <div class="terminal-text">
+LANGUAGES: Python, JavaScript, TypeScript, Go, Rust
+FRAMEWORKS: React, Node.js, Express, Django
+CLOUD: AWS, Terraform, Docker, Kubernetes
+OTHER: CI/CD, Ansible, Monitoring
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            [Press any key to continue...]
+        </div>
+    </div>
+
+    <!-- Include Three.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        // Add basic terminal interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            const terminalBody = document.querySelector('.terminal-body');
+
+            // Simulate typing effect for the first line
+            const commandLine = document.querySelector('.command-line');
+            const commandText = commandLine.querySelector('.command');
+            const originalText = commandText.textContent;
+
+            commandText.textContent = '';
+
+            let i = 0;
+            const typingSpeed = 75;
+
+            function typeWriter() {
+                if (i < originalText.length) {
+                    commandText.textContent += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, typingSpeed);
+                }
+            }
+
+            // Start typing after a short delay
+            setTimeout(typeWriter, 500);
+
+            // Make the terminal interactive
+            document.addEventListener('keydown', function(e) {
+                // Add simple interaction - pressing any key shows a message
+                const footer = document.querySelector('.footer');
+                footer.textContent = 'Command not found. Type "help" for options.';
+
+                setTimeout(() => {
+                    footer.textContent = '[Press any key to continue...]';
+                }, 2000);
+            });
+        });
+
+        // Initialize Three.js scene
+        let scene, camera, renderer, pill, shaderMaterial;
+
+        function init() {
+            // Create scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000000); // Black background
+
+            // Create camera - balanced view with wide FOV for SGI FileVision drama
+            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000); // Reduced FOV for less distortion
+            camera.position.set(0, 18, 40); // Lower camera angle to see cube depth
+            camera.lookAt(0, 0, -4); // Look into the grid center
+
+            // Create renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+            // Create shader for the SGI FileVision interface
+            const vertexShader = `
+                varying vec3 vNormal;
+                varying vec3 vPosition;
+
+                void main() {
+                    vNormal = normalize(normalMatrix * normal);
+                    vPosition = position;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `;
+
+            // Create two different shaders - one for the highlighted block
+            const fragmentShader = `
+                uniform float time;
+                varying vec3 vNormal;
+                varying vec3 vPosition;
+
+                void main() {
+                    // Create the classic SGI FileVision green glow
+                    float brightness = 0.4 + 0.1 * sin(time * 0.5 + vPosition.x * 2.0);
+
+                    // Base green color with subtle animation
+                    vec3 color = vec3(0.0, 0.5 * brightness, 0.0);
+
+                    // Add subtle edge highlighting for 3D effect
+                    vec3 viewDirection = normalize(-vPosition);
+                    float rim = 1.0 - abs(dot(vNormal, viewDirection));
+                    rim = pow(rim, 2.0);
+                    color += vec3(0.0, 0.3 * rim, 0.0);
+
+                    // Pulsing effect for life
+                    float pulse = 0.8 + 0.2 * sin(time * 1.5);
+                    color *= pulse;
+
+                    // Consistent transparency for the classic look
+                    float alpha = 0.8;
+
+                    gl_FragColor = vec4(color, alpha);
+                }
+            `;
+
+            // A brighter shader for the selected block - solid instead of translucent
+            const fragmentShaderHighlighted = `
+                uniform float time;
+                varying vec3 vNormal;
+                varying vec3 vPosition;
+
+                void main() {
+                    // Brighter green for the highlighted block
+                    float brightness = 0.7 + 0.1 * sin(time * 0.5 + vPosition.x * 2.0);
+
+                    // Brighter base green color with subtle animation
+                    vec3 color = vec3(0.0, 0.9 * brightness, 0.2);
+
+                    // More pronounced edge highlighting for 3D effect
+                    vec3 viewDirection = normalize(-vPosition);
+                    float rim = 1.0 - abs(dot(vNormal, viewDirection));
+                    rim = pow(rim, 1.5);
+                    color += vec3(0.0, 0.4 * rim, 0.1);
+
+                    // Pulsing effect for life
+                    float pulse = 1.0 + 0.1 * sin(time * 1.5);
+                    color *= pulse;
+
+                    // Solid (not transparent) for prominence
+                    float alpha = 1.0;
+
+                    gl_FragColor = vec4(color, alpha);
+                }
+            `;
+
+            const shaderMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0.0 }
+                },
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShader,
+                side: THREE.DoubleSide,
+                transparent: false
+            });
+
+            const highlightedShaderMaterial = new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0.0 }
+                },
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShaderHighlighted,
+                side: THREE.DoubleSide,
+                transparent: false
+            });
+
+            // Create the SGI FileVision interface - hierarchical file structure
+            const fileVisionGroup = new THREE.Group();
+
+            // Root directory in the center - balanced size for SGI FileVision look
+            const rootGeometry = new THREE.BoxGeometry(2.5, 2.5, 2.5);
+            const rootBlock = new THREE.Mesh(rootGeometry, shaderMaterial);
+            rootBlock.position.set(0, 1.25, 8); // Position in prominent front area (between rows 3 and 4)
+            fileVisionGroup.add(rootBlock);
+
+            // Grid-aligned directories - shifted 8 units closer to camera (2 rows forward)
+            const dirs = [
+                // Row 1 (z = -4)
+                {name: "dev", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -16, y: 1.25, z: -4}},
+                {name: "mnt", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -12, y: 1.25, z: -4}},
+                {name: "proc", size: {x: 2.5, y: 1.75, z: 2.5}, pos: {x: -8, y: 1.875, z: -4}},
+                {name: "sys", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -4, y: 1.25, z: -4}},
+                {name: "media", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 0, y: 1.25, z: -4}},
+                {name: "init", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 4, y: 1.25, z: -4}},
+                {name: "kernel", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 8, y: 1.25, z: -4}},
+                {name: "config", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 12, y: 1.25, z: -4}},
+                {name: "cache", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 16, y: 1.25, z: -4}},
+                // Row 2 (z = 0)
+                {name: "log", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -16, y: 1.25, z: 0}},
+                {name: "spool", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -12, y: 1.25, z: 0}},
+                {name: "mail", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -8, y: 1.25, z: 0}},
+                {name: "run", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -4, y: 1.25, z: 0}},
+                {name: "lock", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 0, y: 1.25, z: 0}},
+                {name: "lost+found", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 4, y: 1.25, z: 0}},
+                {name: "backup", size: {x: 2.5, y: 1.75, z: 2.5}, pos: {x: 8, y: 1.875, z: 0}},
+                {name: "archive", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 12, y: 1.25, z: 0}},
+                {name: "share", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 16, y: 1.25, z: 0}},
+                // Row 3 (z = 4)
+                {name: "sbin", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -16, y: 1.25, z: 4}},
+                {name: "srv", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -12, y: 1.25, z: 4}},
+                {name: "daemon", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -8, y: 1.25, z: 4}},
+                {name: "gdm", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -4, y: 1.25, z: 4}},
+                {name: "admin", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 0, y: 1.25, z: 4}},
+                {name: "adm", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 4, y: 1.25, z: 4}},
+                {name: "ftp", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 8, y: 1.25, z: 4}},
+                {name: "games", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 12, y: 1.25, z: 4}},
+                {name: "lp", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 16, y: 1.25, z: 4}},
+                // Row 4 (z = 8)
+                {name: "news", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -16, y: 1.25, z: 8}},
+                {name: "uucp", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -12, y: 1.25, z: 8}},
+                {name: "proxy", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -8, y: 1.25, z: 8}},
+                {name: "www", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -4, y: 1.25, z: 8}},
+                {name: "nobody", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 4, y: 1.25, z: 8}},
+                {name: "sync", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 8, y: 1.25, z: 8}},
+                {name: "shutdown", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 12, y: 1.25, z: 8}},
+                {name: "halt", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 16, y: 1.25, z: 8}},
+                // Row 5 (z = 12)
+                {name: "operator", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -16, y: 1.25, z: 12}},
+                {name: "gopher", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -12, y: 1.25, z: 12}},
+                {name: "postgres", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -8, y: 1.25, z: 12}},
+                {name: "mysql", size: {x: 2.5, y: 1.75, z: 2.5}, pos: {x: -4, y: 1.875, z: 12}},
+                {name: "apache", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 0, y: 1.25, z: 12}},
+                {name: "nginx", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 4, y: 1.25, z: 12}},
+                {name: "named", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 8, y: 1.25, z: 12}},
+                {name: "bind", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 12, y: 1.25, z: 12}},
+                {name: "ssh", size: {x: 2.5, y: 1.75, z: 2.5}, pos: {x: 16, y: 1.875, z: 12}},
+                // Row 6 (z = 16)
+                {name: "telnet", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -16, y: 1.25, z: 16}},
+                {name: "rpc", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -12, y: 1.25, z: 16}},
+                {name: "nfs", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -8, y: 1.25, z: 16}},
+                {name: "smb", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -4, y: 1.25, z: 16}},
+                {name: "cifs", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 0, y: 1.25, z: 16}},
+                {name: "ldap", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 4, y: 1.25, z: 16}},
+                {name: "kerberos", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 8, y: 1.25, z: 16}},
+                {name: "radius", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 12, y: 1.25, z: 16}},
+                {name: "tacacs", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 16, y: 1.25, z: 16}},
+                // Row 7 (z = 20)
+                {name: "snmp", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -16, y: 1.25, z: 20}},
+                {name: "syslog", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -12, y: 1.25, z: 20}},
+                {name: "cron", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -8, y: 1.25, z: 20}},
+                {name: "at", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: -4, y: 1.25, z: 20}},
+                {name: "batch", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 0, y: 1.25, z: 20}},
+                {name: "audit", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 4, y: 1.25, z: 20}},
+                {name: "pam", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 8, y: 1.25, z: 20}},
+                {name: "selinux", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 12, y: 1.25, z: 20}},
+                {name: "apparmor", size: {x: 2.5, y: 0.5, z: 2.5}, pos: {x: 16, y: 1.25, z: 20}}
+            ];
+
+            for (const dir of dirs) {
+                const dirGeometry = new THREE.BoxGeometry(dir.size.x, dir.size.y, dir.size.z);
+                let materialToUse = shaderMaterial;
+
+                // Use the highlighted material for the 'proxy' directory
+                if (dir.name === "proxy") {
+                    materialToUse = highlightedShaderMaterial;
+                }
+
+                const dirBlock = new THREE.Mesh(dirGeometry, materialToUse);
+                dirBlock.position.set(dir.pos.x, dir.pos.y, dir.pos.z);
+                fileVisionGroup.add(dirBlock);
+            }
+
+            scene.add(fileVisionGroup);
+
+            // Store reference for animation
+            pill = fileVisionGroup; // Reusing the existing variable name
+
+            // Add lighting appropriate for SGI FileVision interface
+            const ambientLight = new THREE.AmbientLight(0x003300, 0.8);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0x00aa66, 1);
+            directionalLight.position.set(5, 10, 7);
+            scene.add(directionalLight);
+
+            const pointLight = new THREE.PointLight(0x00cc66, 1, 20);
+            pointLight.position.set(-5, 8, 5);
+            scene.add(pointLight);
+
+            // Add a spotlight to highlight the 'proxy' directory - nearly vertical
+            const spotlight = new THREE.SpotLight(0x00ff66, 5, 50, Math.PI / 4, 0.5, 1.0);
+            spotlight.position.set(-8, 20, 10); // Almost directly above, slight offset toward camera
+            spotlight.target.position.set(-8, 0, 8); // Pointing at the 'proxy' directory
+            scene.add(spotlight);
+            scene.add(spotlight.target);
+
+            // Add a visual beam column to represent the angled light - like the reference image
+            const beamGeometry = new THREE.CylinderGeometry(2, 2, 20, 16);
+            const beamMaterial = new THREE.MeshBasicMaterial({
+                color: 0x00ff66,
+                transparent: true,
+                opacity: 0.2,
+                wireframe: false
+            });
+            const lightBeam = new THREE.Mesh(beamGeometry, beamMaterial);
+            // Position beam midpoint between spotlight and target
+            lightBeam.position.set(-8, 10, 9);
+
+            // Calculate direction vector from spotlight to target
+            const spotPos = new THREE.Vector3(-8, 20, 10);
+            const targetPos = new THREE.Vector3(-8, 0, 8);
+            const direction = new THREE.Vector3().subVectors(targetPos, spotPos).normalize();
+
+            // Point beam in that direction (beam points along Y axis by default)
+            const axis = new THREE.Vector3(0, 1, 0);
+            const quaternion = new THREE.Quaternion().setFromUnitVectors(axis, direction);
+            lightBeam.setRotationFromQuaternion(quaternion);
+
+            scene.add(lightBeam);
+
+            // Add a filled highlight circle on the ground to indicate the illuminated area
+            const circleGeometry = new THREE.CircleGeometry(2, 32);
+            const circleMaterial = new THREE.MeshBasicMaterial({
+                color: 0x00ff66,
+                transparent: true,
+                opacity: 0.3,
+                side: THREE.DoubleSide
+            });
+            const lightCircle = new THREE.Mesh(circleGeometry, circleMaterial);
+            lightCircle.position.set(-8, 0.05, 8); // Just above the ground
+            lightCircle.rotation.x = -Math.PI / 2; // Lay flat on the ground
+            scene.add(lightCircle);
+
+            // Create a simple "OPT" label using basic geometries (like a 7-segment display approach)
+            const segmentMaterial = new THREE.MeshPhongMaterial({
+                color: 0x00ff00,
+                emissive: 0x003300
+            });
+
+            // No label added - removed the OPT text label as requested
+
+            // Add a grid floor like the original FileVision - larger to accommodate bigger scene
+            const gridHelper = new THREE.GridHelper(50, 15, 0x006600, 0x004400);
+            gridHelper.position.y = -1;
+            gridHelper.position.z = 10;
+            scene.add(gridHelper);
+
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize, false);
+
+            // Start animation
+            animate();
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Keep the FileVision interface static - no rotation of the blocks
+            // Only animate the shader effects
+            if (pill) {
+                // Keep the interface static in place
+            }
+
+            // Update shader time for pulsing effect
+            if (shaderMaterial) {
+                shaderMaterial.uniforms.time.value += 0.01;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Initialize the scene when the page loads
+        window.onload = init;
+    </script>
+</body>
+</html>
