@@ -174,3 +174,6 @@ aws/
 .claude.json.backup
 .cursor/
 .aider*
+
+# GitHub Actions
+.github/workflows/*.log
