@@ -72,6 +72,10 @@ jobs:
           path: terraform/tfplan
           retention-days: 5
 
+      - name: Display Plan
+        working-directory: terraform
+        run: terraform show tfplan
+
   terraform-apply:
     name: Terraform Apply
     runs-on: ubuntu-latest
@@ -109,15 +113,7 @@ jobs:
 
       - name: Terraform Apply
         working-directory: terraform
-        run: |
-          if [ -n "${{ secrets.DOMAIN_NAME }}" ] && [ -n "${{ secrets.ACM_CERTIFICATE_ARN }}" ]; then
-            terraform apply \
-              -var="domain_name=${{ secrets.DOMAIN_NAME }}" \
-              -var="acm_certificate_arn=${{ secrets.ACM_CERTIFICATE_ARN }}" \
-              -auto-approve tfplan
-          else
-            terraform apply -auto-approve tfplan
-          fi
+        run: terraform apply -auto-approve tfplan
 
       - name: Export Terraform Outputs
         working-directory: terraform
