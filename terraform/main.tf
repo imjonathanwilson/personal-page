@@ -13,7 +13,7 @@ terraform {
     key     = "website/terraform.tfstate"
     region  = "us-east-1"
     encrypt = true
-    profile = "terraform-deployer"
+    # Profile removed - uses AWS credentials from environment (GitHub Actions) or default profile (local)
   }
 }
 

@@ -35,7 +35,7 @@ variable "instance_type" {
 }
 
 variable "aws_profile" {
-  description = "AWS CLI profile to use"
+  description = "AWS CLI profile to use (optional - uses environment credentials if not set)"
   type        = string
-  default     = "terraform-deployer"
+  default     = null
 }
