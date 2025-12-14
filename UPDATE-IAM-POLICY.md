@@ -1,8 +1,6 @@
-# Update IAM Policy for SSM Support
+# Update IAM Policy
 
-The `terraform-deployer` user needs updated permissions to create IAM roles for SSM access.
-
-Run this command with your **admin AWS credentials** (not the terraform-deployer profile):
+Update the terraform-deployer user policy with SSM permissions:
 
 ```bash
 cat > /tmp/terraform-policy-updated.json <<'EOF'
@@ -133,26 +131,9 @@ cat > /tmp/terraform-policy-updated.json <<'EOF'
 }
 EOF
 
-# Update the policy (use your admin profile or default credentials)
+# Update the policy
 aws iam put-user-policy \
     --user-name terraform-deployer \
     --policy-name TerraformDeployPolicy \
     --policy-document file:///tmp/terraform-policy-updated.json
 ```
-
-## What Changed
-
-Added permissions for:
-- **IAM Role Management**: Create/delete roles and instance profiles for SSM
-- **SSM Access**: Start and manage SSM sessions for Ansible
-
-## Verify
-
-```bash
-aws iam get-user-policy \
-    --user-name terraform-deployer \
-    --policy-name TerraformDeployPolicy \
-    --query 'PolicyDocument.Statement[4]'
-```
-
-Should show the new IAM permissions statement.

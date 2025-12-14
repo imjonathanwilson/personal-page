@@ -9,8 +9,9 @@ resource "aws_cloudfront_distribution" "website" {
   price_class         = "PriceClass_100" # North America and Europe only (cheapest)
   aliases             = var.domain_name != "" ? [var.domain_name] : []
 
+  # Primary origin: EC2 instance (DNS name derived from Elastic IP)
   origin {
-    domain_name = aws_instance.web_server.public_dns
+    domain_name = "ec2-${replace(aws_eip.web_server.public_ip, ".", "-")}.compute-1.amazonaws.com"
     origin_id   = "ec2-origin"
 
     custom_origin_config {
@@ -21,10 +22,40 @@ resource "aws_cloudfront_distribution" "website" {
     }
   }
 
+  # Failover origin: S3 maintenance page
+  origin {
+    domain_name = aws_s3_bucket_website_configuration.maintenance.website_endpoint
+    origin_id   = "s3-maintenance-origin"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
+  }
+
+  # Origin group with automatic failover
+  origin_group {
+    origin_id = "origin-group-with-failover"
+
+    failover_criteria {
+      status_codes = [500, 502, 503, 504]
+    }
+
+    member {
+      origin_id = "ec2-origin"
+    }
+
+    member {
+      origin_id = "s3-maintenance-origin"
+    }
+  }
+
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "ec2-origin"
+    target_origin_id = "origin-group-with-failover"
 
     forwarded_values {
       query_string = false

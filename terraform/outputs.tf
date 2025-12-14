@@ -42,3 +42,27 @@ output "cloudfront_id" {
   description = "CloudFront distribution ID"
   value       = aws_cloudfront_distribution.website.id
 }
+
+output "maintenance_bucket_name" {
+  description = "S3 bucket name for maintenance page"
+  value       = aws_s3_bucket.maintenance.id
+}
+
+output "maintenance_bucket_website_endpoint" {
+  description = "S3 bucket website endpoint"
+  value       = aws_s3_bucket_website_configuration.maintenance.website_endpoint
+}
+
+output "maintenance_bucket_url" {
+  description = "S3 bucket website URL"
+  value       = "http://${aws_s3_bucket_website_configuration.maintenance.website_endpoint}"
+}
+
+output "ec2_schedule_info" {
+  description = "EC2 instance automated start/stop schedule"
+  value = {
+    start_time = "6:00 AM ET (11:00 UTC) daily"
+    stop_time  = "11:00 PM ET (04:00 UTC) daily"
+    timezone   = "Eastern Time (UTC-5/UTC-4 during DST)"
+  }
+}
