@@ -9,6 +9,14 @@ resource "aws_s3_bucket" "maintenance" {
   }
 }
 
+resource "aws_s3_bucket_versioning" "maintenance" {
+  bucket = aws_s3_bucket.maintenance.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "maintenance" {
   bucket = aws_s3_bucket.maintenance.id
 

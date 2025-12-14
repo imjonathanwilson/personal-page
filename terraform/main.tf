@@ -9,10 +9,11 @@ terraform {
   }
 
   backend "s3" {
-    bucket  = "jonathan-wilson-terraform-state"
-    key     = "website/terraform.tfstate"
-    region  = "us-east-1"
-    encrypt = true
+    bucket       = "jonathan-wilson-terraform-state"
+    key          = "website/terraform.tfstate"
+    region       = "us-east-1"
+    encrypt      = true
+    use_lockfile = true
     # Profile removed - uses AWS credentials from environment (GitHub Actions) or default profile (local)
   }
 }

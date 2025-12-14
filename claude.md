@@ -6,6 +6,15 @@
 
 The devlog contains documented issues, fixes, and important learnings that provide critical context for working on this project.
 
+## Documentation Policy
+
+**DO NOT create random .md files for documentation.** Instead:
+- Put setup instructions, how-tos, and user-facing documentation in the main **README.md**
+- Put troubleshooting and issue resolution in the **`/devlog`** directory (timestamped entries)
+- Only create separate .md files if explicitly requested by the user
+
+Keep documentation consolidated in README.md to avoid file sprawl.
+
 ## Project Overview
 
 **Name**: Jonathan Wilson Personal Website
@@ -458,5 +467,5 @@ terraform output -raw maintenance_bucket_name
 
 ---
 
-**Last Updated**: 2025-12-13 (Added devlog reference and Ansible SSM troubleshooting)
+**Last Updated**: 2025-12-13 (Added documentation policy, devlog reference, Ansible SSM troubleshooting)
 **Infrastructure Version**: Terraform 1.6.0+, AWS Provider 5.100.0
