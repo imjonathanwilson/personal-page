@@ -184,6 +184,7 @@
             body {
                 overflow-y: auto;
                 overflow-x: hidden;
+                width: 100%;
             }
 
             #canvas-container {
@@ -193,21 +194,23 @@
             .terminal {
                 width: 100%;
                 max-width: 100vw;
+                overflow-x: hidden;
             }
 
             .terminal-body {
-                padding: 15px;
+                padding: 10px;
                 justify-content: flex-start;
                 width: 100%;
                 max-width: 100vw;
+                overflow-x: hidden;
             }
 
             .info-container {
                 min-height: auto;
-                padding: 20px 15px;
-                margin: 10px 0;
-                width: calc(100% - 10px);
-                max-width: 100%;
+                padding: 20px 10px;
+                margin: 10px auto;
+                width: 100%;
+                max-width: calc(100vw - 20px);
                 box-sizing: border-box;
             }
 
@@ -233,11 +236,12 @@
             }
 
             .terminal-text {
-                font-size: 0.85em;
+                font-size: 0.8em;
                 white-space: pre-wrap;
                 word-wrap: break-word;
                 overflow-wrap: break-word;
                 max-width: 100%;
+                overflow-x: hidden;
             }
 
             .command-line {
@@ -270,12 +274,12 @@
 
         @media screen and (max-width: 480px) {
             .terminal-body {
-                padding: 10px 5px;
+                padding: 8px;
             }
 
             .info-container {
-                padding: 15px 10px;
-                width: calc(100% - 10px);
+                padding: 15px 8px;
+                max-width: calc(100vw - 16px);
             }
 
             .info-content h1 {
@@ -287,12 +291,12 @@
             }
 
             .info-content p {
-                font-size: 0.9em;
+                font-size: 0.85em;
                 line-height: 1.5;
             }
 
             .contact-info {
-                font-size: 0.8em;
+                font-size: 0.75em;
             }
 
             .contact-info a {
@@ -302,13 +306,13 @@
             }
 
             .terminal-text {
-                font-size: 0.7em;
+                font-size: 0.65em;
                 white-space: pre-wrap;
                 word-break: break-word;
             }
 
             .command-line {
-                font-size: 0.85em;
+                font-size: 0.8em;
             }
 
             .terminal-title {
