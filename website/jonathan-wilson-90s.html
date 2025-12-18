@@ -177,6 +177,126 @@
             font-size: 0.9em;
             z-index: 10;
         }
+
+        /* Mobile responsive styles */
+        @media screen and (max-width: 768px) {
+            body {
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+            #canvas-container {
+                display: none;
+            }
+
+            .terminal-body {
+                padding: 15px;
+                justify-content: flex-start;
+            }
+
+            .info-container {
+                min-height: auto;
+                padding: 20px 15px;
+                margin: 10px 0;
+            }
+
+            .info-content h1 {
+                font-size: 1.8em;
+                margin-bottom: 8px;
+            }
+
+            .info-content h2 {
+                font-size: 1.3em;
+                margin: 10px 0;
+            }
+
+            .info-content p {
+                font-size: 0.95em;
+                margin: 8px 0;
+            }
+
+            .contact-info {
+                font-size: 0.85em;
+                margin: 12px 0 20px 0;
+            }
+
+            .terminal-text {
+                font-size: 0.85em;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+            }
+
+            .command-line {
+                font-size: 0.9em;
+                margin-top: 12px;
+            }
+
+            .terminal-header {
+                padding: 6px 12px;
+            }
+
+            .terminal-title {
+                font-size: 12px;
+            }
+
+            .control-btn {
+                width: 10px;
+                height: 10px;
+            }
+
+            .footer {
+                position: relative;
+                bottom: auto;
+                text-align: center;
+                padding: 15px;
+                font-size: 0.8em;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .terminal-body {
+                padding: 10px;
+            }
+
+            .info-container {
+                padding: 15px 10px;
+            }
+
+            .info-content h1 {
+                font-size: 1.5em;
+            }
+
+            .info-content h2 {
+                font-size: 1.1em;
+            }
+
+            .info-content p {
+                font-size: 0.9em;
+                line-height: 1.5;
+            }
+
+            .contact-info {
+                font-size: 0.8em;
+            }
+
+            .contact-info a {
+                padding: 5px 0;
+                display: inline-block;
+            }
+
+            .terminal-text {
+                font-size: 0.75em;
+            }
+
+            .command-line {
+                font-size: 0.85em;
+            }
+
+            .terminal-title {
+                font-size: 11px;
+            }
+        }
     </style>
 </head>
 <body>
