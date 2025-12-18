@@ -81,6 +81,7 @@
         .info-container {
             text-align: center;
             max-width: 800px;
+            width: 100%;
             min-height: 700px;
             padding: 40px;
             background-color: rgba(0, 15, 0, 0.85); /* Darker background for better text visibility */
@@ -189,15 +190,25 @@
                 display: none;
             }
 
+            .terminal {
+                width: 100%;
+                max-width: 100vw;
+            }
+
             .terminal-body {
                 padding: 15px;
                 justify-content: flex-start;
+                width: 100%;
+                max-width: 100vw;
             }
 
             .info-container {
                 min-height: auto;
                 padding: 20px 15px;
                 margin: 10px 0;
+                width: calc(100% - 10px);
+                max-width: 100%;
+                box-sizing: border-box;
             }
 
             .info-content h1 {
@@ -213,6 +224,7 @@
             .info-content p {
                 font-size: 0.95em;
                 margin: 8px 0;
+                text-align: center;
             }
 
             .contact-info {
@@ -225,11 +237,13 @@
                 white-space: pre-wrap;
                 word-wrap: break-word;
                 overflow-wrap: break-word;
+                max-width: 100%;
             }
 
             .command-line {
                 font-size: 0.9em;
                 margin-top: 12px;
+                flex-wrap: wrap;
             }
 
             .terminal-header {
@@ -256,11 +270,12 @@
 
         @media screen and (max-width: 480px) {
             .terminal-body {
-                padding: 10px;
+                padding: 10px 5px;
             }
 
             .info-container {
                 padding: 15px 10px;
+                width: calc(100% - 10px);
             }
 
             .info-content h1 {
@@ -283,10 +298,13 @@
             .contact-info a {
                 padding: 5px 0;
                 display: inline-block;
+                word-break: break-all;
             }
 
             .terminal-text {
-                font-size: 0.75em;
+                font-size: 0.7em;
+                white-space: pre-wrap;
+                word-break: break-word;
             }
 
             .command-line {
