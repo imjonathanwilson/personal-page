@@ -50,13 +50,12 @@
         mode: '0755'
 
     - name: Copy Next.js build files
-      synchronize:
+      copy:
         src: "{{ build_source }}/"
         dest: "{{ website_dir }}/"
-        delete: yes
-        recursive: yes
-      become: no
-      delegate_to: localhost
+        owner: "{{ nginx_user }}"
+        group: "{{ nginx_user }}"
+        mode: preserve
 
     - name: Set ownership of website files
       file:
