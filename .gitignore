@@ -132,8 +132,16 @@ temp/
 node_modules/
 npm-debug.log
 yarn-error.log
-package-lock.json
-yarn.lock
+# NOTE: package-lock.json should generally NOT be ignored for applications
+# package-lock.json
+# yarn.lock
+
+# Next.js
+.next/
+out/
+.turbo/
+*.tsbuildinfo
+next-env.d.ts
 
 # Certificates
 *.crt
@@ -174,6 +182,19 @@ aws/
 .claude.json.backup
 .cursor/
 .aider*
+
+# Screenshots & Debug artifacts
+.screenshots/
+screenshots/
+*.png
+*.jpg
+*.jpeg
+!website/assets/**/*.png
+!website/assets/**/*.jpg
+!website/assets/**/*.jpeg
+
+# MCP Server (local configuration - may vary per developer)
+.mcp.json
 
 # GitHub Actions
 .github/workflows/*.log

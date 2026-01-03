@@ -1,0 +1,138 @@
+/*
+ * InfoContent Component Styles
+ * Terminal content area with resume information
+ */
+
+.infoContainer {
+  text-align: center;
+  max-width: 800px;
+  width: 100%;
+  min-height: 700px;
+  padding: 40px;
+  background-color: var(--terminal-bg);
+  border-radius: 5px;
+}
+
+.terminalPrompt {
+  display: inline-block;
+  margin-right: 8px;
+  color: var(--color-green-primary);
+}
+
+.commandLine {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.command {
+  color: var(--color-white);
+}
+
+.cursor {
+  display: inline-block;
+  width: 8px;
+  height: 1.2em;
+  background-color: var(--color-green-primary);
+  margin-left: 4px;
+  vertical-align: middle;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.terminalText {
+  white-space: pre;
+  text-align: left;
+}
+
+.contactInfo {
+  margin: 15px 0 25px 0;
+  font-size: 0.95em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.contactInfo a {
+  color: var(--color-green-primary);
+  text-decoration: none;
+  display: block;
+}
+
+.contactInfo a:hover {
+  color: var(--color-cyan);
+  text-decoration: underline;
+}
+
+.separator {
+  display: none;
+}
+
+/* Tablet Responsive */
+@media (max-width: 768px) {
+  .infoContainer {
+    min-height: auto;
+    padding: 20px 10px;
+    margin: 10px auto;
+    width: 100%;
+    max-width: calc(100vw - 20px);
+    box-sizing: border-box;
+  }
+
+  .contactInfo {
+    font-size: 0.85em;
+    margin: 12px 0 20px 0;
+  }
+
+  .terminalText {
+    font-size: 0.8em;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .commandLine {
+    font-size: 0.9em;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+}
+
+/* Mobile Responsive */
+@media (max-width: 480px) {
+  .infoContainer {
+    padding: 15px 8px;
+    max-width: calc(100vw - 16px);
+  }
+
+  .contactInfo {
+    font-size: 0.75em;
+  }
+
+  .contactInfo a {
+    padding: 5px 0;
+    display: inline-block;
+    word-break: break-all;
+  }
+
+  .terminalText {
+    font-size: 0.65em;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .commandLine {
+    font-size: 0.8em;
+  }
+}

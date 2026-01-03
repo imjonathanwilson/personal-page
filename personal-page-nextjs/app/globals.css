@@ -1,0 +1,153 @@
+/*
+ * Global Styles - Next.js Migration
+ * Extracted from website/jonathan-wilson-90s.html
+ * Maintains 100% visual parity with original static site
+ */
+
+/* ============================================
+   CSS Custom Properties (Design Tokens)
+   ============================================ */
+:root {
+  /* Colors - Terminal Theme */
+  --color-black: #000;
+  --color-green-primary: #0f0;
+  --color-green-dark: #00aa00;
+  --color-cyan: #0ff;
+  --color-white: #fff;
+  --color-gray-dark: #333;
+  --color-gray-medium: #555;
+  --color-gray-light: #aaa;
+
+  /* Window Controls */
+  --color-red: #ff5f57;
+  --color-yellow: #ffbd2e;
+  --color-green-button: #28c940;
+
+  /* Terminal Background */
+  --terminal-bg: rgba(0, 15, 0, 0.85);
+
+  /* Responsive Breakpoints */
+  --breakpoint-tablet: 768px;
+  --breakpoint-mobile: 480px;
+}
+
+/* ============================================
+   Global Resets
+   ============================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ============================================
+   Base Styles
+   ============================================ */
+body,
+html {
+  width: 100%;
+  height: 100%;
+  font-family: 'Courier New', monospace;
+  background-color: transparent;
+  color: var(--color-green-primary);
+  overflow: hidden;
+}
+
+html {
+  background-color: var(--color-black);
+}
+
+body {
+  position: relative;
+}
+
+/* ============================================
+   Typography
+   ============================================ */
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  color: var(--color-white);
+  text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+}
+
+h2 {
+  font-size: 1.8em;
+  margin: 15px 0;
+  color: var(--color-green-primary);
+}
+
+p {
+  margin: 10px 0;
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--color-green-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-cyan);
+  text-decoration: underline;
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   Responsive Design - Tablet
+   ============================================ */
+@media screen and (max-width: 768px) {
+  body,
+  html {
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 1.8em;
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 1.3em;
+    margin: 10px 0;
+  }
+
+  p {
+    font-size: 0.95em;
+    margin: 8px 0;
+    text-align: center;
+  }
+}
+
+/* ============================================
+   Responsive Design - Mobile
+   ============================================ */
+@media screen and (max-width: 480px) {
+  h1 {
+    font-size: 1.5em;
+  }
+
+  h2 {
+    font-size: 1.1em;
+  }
+
+  p {
+    font-size: 0.85em;
+    line-height: 1.5;
+  }
+}

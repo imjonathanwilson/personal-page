@@ -5,6 +5,7 @@
   vars:
     website_dir: /var/www/html
     nginx_user: nginx
+    build_source: ../nextjs-build
 
   tasks:
     - name: Update all packages
@@ -35,13 +36,41 @@
         group: "{{ nginx_user }}"
         mode: '0755'
 
-    - name: Copy website HTML file
-      copy:
-        src: ../website/jonathan-wilson-90s.html
-        dest: "{{ website_dir }}/index.html"
+    - name: Clean website directory
+      file:
+        path: "{{ website_dir }}"
+        state: absent
+
+    - name: Recreate website directory
+      file:
+        path: "{{ website_dir }}"
+        state: directory
         owner: "{{ nginx_user }}"
         group: "{{ nginx_user }}"
-        mode: '0644'
+        mode: '0755'
+
+    - name: Copy Next.js build files
+      synchronize:
+        src: "{{ build_source }}/"
+        dest: "{{ website_dir }}/"
+        delete: yes
+        recursive: yes
+      become: no
+      delegate_to: localhost
+
+    - name: Set ownership of website files
+      file:
+        path: "{{ website_dir }}"
+        owner: "{{ nginx_user }}"
+        group: "{{ nginx_user }}"
+        recurse: yes
+        state: directory
+
+    - name: Set permissions for directories
+      command: find {{ website_dir }} -type d -exec chmod 755 {} \;
+
+    - name: Set permissions for files
+      command: find {{ website_dir }} -type f -exec chmod 644 {} \;
       notify: restart nginx
 
     - name: Configure nginx
