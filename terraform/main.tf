@@ -54,12 +54,22 @@ data "aws_ami" "amazon_linux_2023_arm64" {
 
 # VPC
 resource "aws_vpc" "main" {
+  #checkov:skip=CKV2_AWS_11:VPC flow logs add CloudWatch/S3 cost; single-instance personal VPC with no private workloads
   cidr_block           = var.vpc_cidr
   enable_dns_hostnames = true
   enable_dns_support   = true
 
   tags = {
     Name = "${var.project_name}-vpc"
+  }
+}
+
+# Lock down the VPC default security group (no rules; nothing uses it)
+resource "aws_default_security_group" "default" {
+  vpc_id = aws_vpc.main.id
+
+  tags = {
+    Name = "${var.project_name}-default-sg-locked"
   }
 }
 
@@ -74,6 +84,7 @@ resource "aws_internet_gateway" "main" {
 
 # Public Subnet
 resource "aws_subnet" "public" {
+  #checkov:skip=CKV_AWS_130:Public subnet; the web server needs a public address and there is no NAT gateway
   vpc_id                  = aws_vpc.main.id
   cidr_block              = var.public_subnet_cidr
   availability_zone       = data.aws_availability_zones.available.names[0]
@@ -106,6 +117,8 @@ resource "aws_route_table_association" "public" {
 
 # Security Group
 resource "aws_security_group" "web_server" {
+  #checkov:skip=CKV_AWS_260:Port 80 must be open: CloudFront uses http-only to reach the EC2 origin and CloudFront IPs are not a fixed CIDR
+  #checkov:skip=CKV_AWS_382:Instance needs outbound internet for package updates and SSM/AWS APIs and has no NAT or VPC endpoints
   name        = "web-server-sg"
   description = "Security group for web server"
   vpc_id      = aws_vpc.main.id
@@ -141,6 +154,9 @@ resource "aws_security_group" "web_server" {
 
 # EC2 Instance - Graviton (ARM64)
 resource "aws_instance" "web_server" {
+  #checkov:skip=CKV_AWS_135:Setting ebs_optimized on the existing instance forces replacement (state has false); t4g instances are EBS-optimized by default
+  #checkov:skip=CKV_AWS_88:Instance is the CloudFront origin in a public subnet with an Elastic IP; no NAT/ALB by design to save cost
+  #checkov:skip=CKV_AWS_126:Detailed (1-minute) monitoring is a paid add-on; basic monitoring is sufficient for a personal site
   ami           = data.aws_ami.amazon_linux_2023_arm64.id
   instance_type = var.instance_type # t4g.small for Graviton
 
@@ -175,6 +191,7 @@ resource "aws_instance" "web_server" {
 
 # Data source for availability zones
 data "aws_availability_zones" "available" {
+  #checkov:skip=CKV_AWS_394:Only the first available AZ name is used for a single subnet; pinning zone identity is not needed
   state = "available"
 }
 

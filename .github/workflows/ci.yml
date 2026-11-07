@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '24'
+
+jobs:
+  lint-typecheck:
+    name: Lint & Typecheck
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: 'personal-page-nextjs/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: personal-page-nextjs
+        run: npm ci
+
+      - name: Lint
+        working-directory: personal-page-nextjs
+        run: npm run lint
+
+      - name: Typecheck
+        working-directory: personal-page-nextjs
+        run: npx tsc --noEmit
+
+  checkov:
+    name: Checkov
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # Blocking: any failed check fails the job. Findings are also uploaded as
+      # SARIF below. Intentional exceptions use inline #checkov:skip comments.
+      - name: Run Checkov
+        uses: bridgecrewio/checkov-action@99bb2caf247dfd9f03cf984373bc6043d4e32ebf # v12.1347.0
+        with:
+          directory: .
+          framework: terraform
+          output_format: sarif
+          output_file_path: reports/
+          soft_fail: false
+
+      - name: Upload SARIF
+        if: ${{ !cancelled() && hashFiles('reports/results_sarif.sarif') != '' }}
+        uses: github/codeql-action/upload-sarif@33d7b85da1a04171e211befe2c739303b9a4c066 # v4.39.3
+        with:
+          sarif_file: reports/results_sarif.sarif
+          category: checkov

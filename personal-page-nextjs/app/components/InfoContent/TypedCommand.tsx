@@ -13,30 +13,16 @@ export default function TypedCommand({
   initialDelay = 500,
   typingSpeed = 75,
 }: TypedCommandProps) {
-  const [displayedText, setDisplayedText] = useState('')
-  const [currentIndex, setCurrentIndex] = useState(0)
-
-  useEffect(() => {
-    // Reset state when text changes
-    setDisplayedText('')
-    setCurrentIndex(0)
-
-    // Initial delay before typing starts
-    const initialTimeout = setTimeout(() => {
-      setCurrentIndex(0)
-    }, initialDelay)
-
-    return () => {
-      clearTimeout(initialTimeout)
-    }
-  }, [text, initialDelay])
+  // Track progress alongside the text it belongs to, so a text change resets
+  // typing without calling setState synchronously inside an effect.
+  const [progress, setProgress] = useState({ text, index: 0 })
+  const currentIndex = progress.text === text ? progress.index : 0
 
   useEffect(() => {
     // Typing effect
     if (currentIndex < text.length) {
       const typingTimeout = setTimeout(() => {
-        setDisplayedText((prev) => prev + text.charAt(currentIndex))
-        setCurrentIndex((prev) => prev + 1)
+        setProgress({ text, index: currentIndex + 1 })
       }, currentIndex === 0 ? initialDelay : typingSpeed)
 
       return () => {
@@ -45,5 +31,5 @@ export default function TypedCommand({
     }
   }, [currentIndex, text, typingSpeed, initialDelay])
 
-  return <>{displayedText}</>
+  return <>{text.slice(0, currentIndex)}</>
 }

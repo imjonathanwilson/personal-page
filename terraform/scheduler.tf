@@ -3,6 +3,7 @@
 
 # Stop EC2 instance at 11 PM Eastern Time (04:00 UTC)
 resource "aws_scheduler_schedule" "stop_ec2" {
+  #checkov:skip=CKV_AWS_297:Schedule payload is only an instance ID; a CMK adds cost with no benefit
   name       = "${var.project_name}-stop-ec2"
   group_name = "default"
 
@@ -29,6 +30,7 @@ resource "aws_scheduler_schedule" "stop_ec2" {
 
 # Start EC2 instance at 6 AM Eastern Time (11:00 UTC)
 resource "aws_scheduler_schedule" "start_ec2" {
+  #checkov:skip=CKV_AWS_297:Schedule payload is only an instance ID; a CMK adds cost with no benefit
   name       = "${var.project_name}-start-ec2"
   group_name = "default"
 

@@ -1,7 +1,46 @@
 # CloudFront distribution for the website
 # Provides global CDN, free SSL, and DDoS protection
 
+# Baseline security headers (mirrors the AWS managed SecurityHeadersPolicy)
+resource "aws_cloudfront_response_headers_policy" "security" {
+  name = "${var.project_name}-security-headers"
+
+  security_headers_config {
+    content_type_options {
+      override = true
+    }
+
+    frame_options {
+      frame_option = "SAMEORIGIN"
+      override     = true
+    }
+
+    referrer_policy {
+      referrer_policy = "strict-origin-when-cross-origin"
+      override        = true
+    }
+
+    strict_transport_security {
+      access_control_max_age_sec = 31536000
+      include_subdomains         = true
+      preload                    = true
+      override                   = true
+    }
+
+    xss_protection {
+      mode_block = true
+      protection = true
+      override   = true
+    }
+  }
+}
+
 resource "aws_cloudfront_distribution" "website" {
+  #checkov:skip=CKV_AWS_68:WAF costs a monthly fee plus per-request charges; this is a low-traffic static personal site
+  #checkov:skip=CKV_AWS_86:Access logging needs an extra S3 log bucket; site is a low-traffic personal page and logging is not required
+  #checkov:skip=CKV_AWS_374:Personal site is intentionally reachable worldwide; no geo restriction wanted
+  #checkov:skip=CKV2_AWS_42:Custom certificate is applied when var.domain_name is set; default CloudFront cert is used otherwise
+  #checkov:skip=CKV2_AWS_47:No WAF is attached (see CKV_AWS_68), so the Log4j AMR rule does not apply
   enabled             = true
   is_ipv6_enabled     = true
   comment             = "Jonathan Wilson 90s Website CDN"
@@ -65,6 +104,8 @@ resource "aws_cloudfront_distribution" "website" {
         forward = "none"
       }
     }
+
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.security.id
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0

@@ -1,0 +1,47 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/personal-page-nextjs"
+    schedule:
+      interval: "weekly"
+    groups:
+      npm-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      github-actions-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      pip-minor-patch:
+        update-types:
+          - "minor"
+          - "patch"
+  - package-ecosystem: "terraform"
+    directory: "/terraform"
+    schedule:
+      interval: "weekly"
+    groups:
+      terraform-minor-patch-terraform:
+        update-types:
+          - "minor"
+          - "patch"
+  - package-ecosystem: "terraform"
+    directory: "/terraform-backend"
+    schedule:
+      interval: "weekly"
+    groups:
+      terraform-minor-patch-backend:
+        update-types:
+          - "minor"
+          - "patch"
