@@ -352,11 +352,23 @@ resource "aws_iam_role_policy" "github_actions" {
       {
         # Used by the Ansible aws_ssm connection plugin (session start; file
         # transfer goes through the maintenance bucket granted above).
-        Sid    = "SsmSessionToInstances"
+        # Only project-tagged instances (Project tag comes from default_tags in terraform/).
+        Sid      = "SsmSessionToProjectInstances"
+        Effect   = "Allow"
+        Action   = "ssm:StartSession"
+        Resource = "arn:aws:ec2:${local.region}:${local.account_id}:instance/*"
+        Condition = {
+          StringEquals = { "aws:ResourceTag/Project" = "JonathanWilson90s" }
+        }
+      },
+      {
+        # Session document: account-owned preferences doc ARN, plus the
+        # region-only form for safety.
+        Sid    = "SsmSessionDocument"
         Effect = "Allow"
         Action = "ssm:StartSession"
         Resource = [
-          "arn:aws:ec2:${local.region}:${local.account_id}:instance/*",
+          "arn:aws:ssm:${local.region}:${local.account_id}:document/SSM-SessionManagerRunShell",
           "arn:aws:ssm:${local.region}::document/SSM-SessionManagerRunShell",
         ]
       },
