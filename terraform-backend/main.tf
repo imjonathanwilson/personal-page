@@ -19,6 +19,11 @@ provider "aws" {
 
 # S3 Bucket for Terraform State
 resource "aws_s3_bucket" "terraform_state" {
+  #checkov:skip=CKV2_AWS_61:Lifecycle expiry would delete old state versions kept for recovery
+  #checkov:skip=CKV2_AWS_62:No consumer for state-change events
+  #checkov:skip=CKV_AWS_144:Single-region personal project; versioning covers recovery
+  #checkov:skip=CKV_AWS_145:SSE-S3 encryption is enabled; a KMS CMK adds cost without benefit here
+  #checkov:skip=CKV_AWS_18:Access logging needs a separate log bucket; CloudTrail covers API access
   bucket = "jonathan-wilson-terraform-state"
 
   lifecycle {
@@ -110,6 +115,8 @@ resource "aws_iam_openid_connect_provider" "github" {
 #   - EventBridge scheduler role: ec2:StartInstances / ec2:StopInstances
 # -----------------------------------------------------------------------------
 resource "aws_iam_policy" "project_boundary" {
+  #checkov:skip=CKV_AWS_290:Permissions boundary is a ceiling, not a grant; role policies scope resources
+  #checkov:skip=CKV_AWS_355:Permissions boundary is a ceiling, not a grant; SSM agent actions require Resource "*"
   name        = "${local.project_name}-boundary"
   description = "Permissions boundary for jonathan-wilson project roles"
 
@@ -229,6 +236,12 @@ resource "aws_iam_role_policy" "github_actions" {
           "arn:aws:s3:::${local.project_name}-maintenance",
           "arn:aws:s3:::${local.project_name}-maintenance/*",
         ]
+      },
+      {
+        Sid      = "CloudFrontResponseHeadersPolicies"
+        Effect   = "Allow"
+        Action   = "cloudfront:*ResponseHeadersPolic*"
+        Resource = "arn:aws:cloudfront::${local.account_id}:response-headers-policy/*"
       },
       {
         Sid      = "CloudFrontDistributions"
