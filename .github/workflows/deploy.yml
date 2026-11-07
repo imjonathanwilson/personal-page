@@ -21,6 +21,8 @@ jobs:
   build-nextjs:
     name: Build Next.js Application
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout code
@@ -52,6 +54,7 @@ jobs:
     name: Terraform Plan
     runs-on: ubuntu-latest
     permissions:
+      id-token: write
       contents: read
       pull-requests: write
 
@@ -62,8 +65,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform
@@ -110,6 +112,9 @@ jobs:
   terraform-apply:
     name: Terraform Apply
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     needs: terraform-plan
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
 
@@ -120,8 +125,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform
@@ -153,6 +157,9 @@ jobs:
   deploy-website:
     name: Deploy Website with Ansible
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     needs: [terraform-apply, build-nextjs]
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
 
@@ -169,8 +176,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Python
@@ -213,6 +219,9 @@ jobs:
   invalidate-cloudfront:
     name: Invalidate CloudFront Cache
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     needs: deploy-website
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
 
@@ -223,8 +232,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform (for outputs)
