@@ -22,6 +22,7 @@ export default function ThreeScene() {
       console.error('[ThreeScene] containerRef.current is null!');
       return;
     }
+    const container = containerRef.current;
     console.log('[ThreeScene] Container ref found, creating scene...');
 
     // Scene setup
@@ -355,8 +356,8 @@ export default function ThreeScene() {
       renderer.dispose();
 
       // Remove canvas
-      if (containerRef.current && renderer.domElement.parentNode === containerRef.current) {
-        containerRef.current.removeChild(renderer.domElement);
+      if (renderer.domElement.parentNode === container) {
+        container.removeChild(renderer.domElement);
       }
     };
   }, []);

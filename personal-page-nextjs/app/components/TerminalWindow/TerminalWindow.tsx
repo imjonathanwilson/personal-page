@@ -2,7 +2,6 @@
 
 import { ReactNode } from 'react'
 import styles from './TerminalWindow.module.css'
-import TerminalHeader from './TerminalHeader'
 
 interface TerminalWindowProps {
   children: ReactNode

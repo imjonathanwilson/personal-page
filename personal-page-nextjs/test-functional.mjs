@@ -1,9 +1,5 @@
 import { chromium } from '@playwright/test';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 async function runTests() {
   const browser = await chromium.launch({ headless: true });

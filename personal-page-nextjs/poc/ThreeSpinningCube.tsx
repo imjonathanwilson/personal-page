@@ -10,6 +10,7 @@ export default function ThreeSpinningCube() {
 
   useEffect(() => {
     if (!containerRef.current) return
+    const container = containerRef.current
 
     // Scene setup
     const scene = new THREE.Scene()
@@ -50,8 +51,8 @@ export default function ThreeSpinningCube() {
       if (animationIdRef.current) {
         cancelAnimationFrame(animationIdRef.current)
       }
-      if (rendererRef.current && containerRef.current) {
-        containerRef.current.removeChild(rendererRef.current.domElement)
+      if (rendererRef.current) {
+        container.removeChild(rendererRef.current.domElement)
       }
       geometry.dispose()
       material.dispose()
