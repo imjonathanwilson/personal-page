@@ -89,13 +89,16 @@ jobs:
       - name: Terraform Plan
         working-directory: terraform
         run: |
+          # PR plans are read-only; skip the state lock so parallel PRs don't collide.
+          LOCK=""
+          if [ "${{ github.event_name }}" = "pull_request" ]; then LOCK="-lock=false"; fi
           if [ -n "${{ secrets.DOMAIN_NAME }}" ] && [ -n "${{ secrets.ACM_CERTIFICATE_ARN }}" ]; then
-            terraform plan \
+            terraform plan $LOCK \
               -var="domain_name=${{ secrets.DOMAIN_NAME }}" \
               -var="acm_certificate_arn=${{ secrets.ACM_CERTIFICATE_ARN }}" \
               -out=tfplan
           else
-            terraform plan -out=tfplan
+            terraform plan $LOCK -out=tfplan
           fi
 
       - name: Upload Terraform Plan
