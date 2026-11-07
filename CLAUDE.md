@@ -146,8 +146,8 @@ The Ansible playbook (`ansible/playbook.yml`) performs:
 ## GitHub Actions Secrets
 
 Required repository secrets:
-- `AWS_ACCESS_KEY_ID`: AWS credentials for Terraform and Ansible
-- `AWS_SECRET_ACCESS_KEY`: AWS secret key
+- `AWS_ROLE_ARN`: OIDC deploy role for `main` (output `github_actions_role_arn` of `terraform-backend`)
+- `AWS_PLAN_ROLE_ARN`: read-only OIDC role for pull request plans (output `github_actions_plan_role_arn`)
 - `DOMAIN_NAME`: (Optional) Custom domain
 - `ACM_CERTIFICATE_ARN`: (Required if DOMAIN_NAME is set)
 

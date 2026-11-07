@@ -1,6 +1,16 @@
+# Permissions boundary managed in terraform-backend/ (so the CI role cannot edit
+# it). Every project role must carry it; the CI role is only allowed to create
+# or modify roles with this boundary attached.
+data "aws_caller_identity" "current" {}
+
+locals {
+  permissions_boundary_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${var.project_name}-boundary"
+}
+
 # IAM Role for EC2 to use SSM
 resource "aws_iam_role" "ec2_ssm_role" {
-  name = "${var.project_name}-ec2-ssm-role"
+  name                 = "${var.project_name}-ec2-ssm-role"
+  permissions_boundary = local.permissions_boundary_arn
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -38,7 +48,8 @@ resource "aws_iam_instance_profile" "ec2_profile" {
 
 # IAM Role for EventBridge Scheduler to start/stop EC2
 resource "aws_iam_role" "eventbridge_scheduler_role" {
-  name = "${var.project_name}-eventbridge-scheduler-role"
+  name                 = "${var.project_name}-eventbridge-scheduler-role"
+  permissions_boundary = local.permissions_boundary_arn
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
