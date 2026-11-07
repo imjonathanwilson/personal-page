@@ -238,6 +238,17 @@ resource "aws_iam_role_policy" "github_actions" {
         ]
       },
       {
+        # Private scratch bucket for Ansible aws_ssm file transfer (presigned
+        # URLs are signed by this role, so the instance role needs no S3).
+        Sid    = "SsmTransferBucket"
+        Effect = "Allow"
+        Action = "s3:*"
+        Resource = [
+          "arn:aws:s3:::${local.project_name}-ssm-transfer",
+          "arn:aws:s3:::${local.project_name}-ssm-transfer/*",
+        ]
+      },
+      {
         Sid      = "CloudFrontResponseHeadersPolicies"
         Effect   = "Allow"
         Action   = "cloudfront:*ResponseHeadersPolic*"
@@ -364,7 +375,7 @@ resource "aws_iam_role_policy" "github_actions" {
       },
       {
         # Used by the Ansible aws_ssm connection plugin (session start; file
-        # transfer goes through the maintenance bucket granted above).
+        # transfer goes through the ssm-transfer bucket granted above).
         # Only project-tagged instances (Project tag comes from default_tags in terraform/).
         Sid      = "SsmSessionToProjectInstances"
         Effect   = "Allow"

@@ -66,3 +66,8 @@ output "ec2_schedule_info" {
     timezone   = "Eastern Time (UTC-5/UTC-4 during DST)"
   }
 }
+
+output "ssm_transfer_bucket_name" {
+  description = "Private S3 bucket used by Ansible's aws_ssm connection for file transfer"
+  value       = aws_s3_bucket.ssm_transfer.id
+}

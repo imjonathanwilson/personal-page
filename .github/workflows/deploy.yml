@@ -192,9 +192,28 @@ jobs:
           pip install -r requirements.txt
 
       - name: Install AWS Session Manager Plugin
+        env:
+          SSM_PLUGIN_VERSION: '1.2.896.0'
+          # Fingerprint published by AWS:
+          # https://docs.aws.amazon.com/systems-manager/latest/userguide/install-plugin-linux-verify-signature.html
+          SSM_PLUGIN_KEY_FPR: '7959 6371 24CE 093A D501 D47A 2C4D 4AFF 6F67 57EE'
         run: |
-          curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
-          sudo dpkg -i session-manager-plugin.deb
+          set -euo pipefail
+          base="https://s3.amazonaws.com/session-manager-downloads/plugin/${SSM_PLUGIN_VERSION}/ubuntu_64bit"
+          workdir=$(mktemp -d)
+          curl -fsSL "${base}/session-manager-plugin.deb" -o "${workdir}/session-manager-plugin.deb"
+          curl -fsSL "${base}/session-manager-plugin.deb.sig" -o "${workdir}/session-manager-plugin.deb.sig"
+          export GNUPGHOME="${workdir}/gnupg"
+          mkdir -m 700 "${GNUPGHOME}"
+          gpg --batch --import .github/aws-ssm-plugin-signer.asc
+          fpr=$(gpg --batch --with-colons --fingerprint | awk -F: '/^fpr:/ {print $10; exit}')
+          expected=$(echo "${SSM_PLUGIN_KEY_FPR}" | tr -d ' ')
+          if [ "${fpr}" != "${expected}" ]; then
+            echo "Unexpected signing key fingerprint: ${fpr}" >&2
+            exit 1
+          fi
+          gpg --batch --verify "${workdir}/session-manager-plugin.deb.sig" "${workdir}/session-manager-plugin.deb"
+          sudo dpkg -i "${workdir}/session-manager-plugin.deb"
 
       - name: Setup Terraform (for outputs)
         uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
@@ -212,7 +231,7 @@ jobs:
         working-directory: terraform
         run: |
           INSTANCE_ID=$(terraform output -raw instance_id)
-          BUCKET_NAME=$(terraform output -raw maintenance_bucket_name)
+          BUCKET_NAME=$(terraform output -raw ssm_transfer_bucket_name)
           mkdir -p ../ansible/inventory
           sed -e "s|\${instance_id}|${INSTANCE_ID}|g" \
               -e "s|\${bucket_name}|${BUCKET_NAME}|g" \

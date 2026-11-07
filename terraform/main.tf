@@ -211,7 +211,7 @@ resource "aws_eip" "web_server" {
 resource "local_file" "ansible_inventory" {
   content = templatefile("${path.module}/templates/inventory.tpl", {
     instance_id = aws_instance.web_server.id
-    bucket_name = aws_s3_bucket.maintenance.id
+    bucket_name = aws_s3_bucket.ssm_transfer.id
   })
   filename = "${path.module}/../ansible/inventory/hosts"
 }
