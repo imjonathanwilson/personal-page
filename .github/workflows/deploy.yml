@@ -205,6 +205,20 @@ jobs:
         working-directory: terraform
         run: terraform init
 
+      # ansible/inventory/hosts is gitignored and the local_file resource only
+      # writes it on the apply runner, so render the same template here.
+      - name: Generate Ansible inventory
+        working-directory: terraform
+        run: |
+          INSTANCE_ID=$(terraform output -raw instance_id)
+          BUCKET_NAME=$(terraform output -raw maintenance_bucket_name)
+          mkdir -p ../ansible/inventory
+          sed -e "s|\${instance_id}|${INSTANCE_ID}|g" \
+              -e "s|\${bucket_name}|${BUCKET_NAME}|g" \
+              -e 's|\$\${|${|g' \
+              templates/inventory.tpl > ../ansible/inventory/hosts
+          cat ../ansible/inventory/hosts
+
       - name: Wait for SSM agent
         run: |
           echo "Waiting 60 seconds for SSM agent to be ready..."
