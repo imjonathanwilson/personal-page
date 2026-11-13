@@ -1,0 +1,171 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 484px; /* clear the right-hand terminal panel (460px + 24px gutter) */
+  z-index: 2;
+  padding: 4px 8px 6px;
+  font-family: Helvetica, Arial, 'Liberation Sans', sans-serif;
+  font-size: 13px;
+  color: #000;
+  background: #b4c8cc;
+  border-bottom: 2px solid #5c6e72;
+  border-right: 2px solid #5c6e72;
+  box-shadow: inset 1px 1px 0 #e8f2f4;
+}
+
+/* While a pull-down is open the header sits above the full-screen click catcher */
+.header:has([data-fsn-menu] [aria-expanded='true']) {
+  z-index: 11;
+}
+
+.menuRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+}
+
+.menuButton {
+  font: inherit;
+  font-style: italic;
+  color: #000;
+  background: #b4c8cc;
+  padding: 1px 8px;
+  white-space: nowrap;
+  border: 2px solid;
+  border-color: #e8f2f4 #5c6e72 #5c6e72 #e8f2f4;
+  cursor: pointer;
+}
+
+.menuButton:disabled {
+  color: #6c7c80;
+  cursor: default;
+}
+
+.menuButton:not(:disabled):active,
+.active {
+  border-color: #5c6e72 #e8f2f4 #e8f2f4 #5c6e72;
+  background: #a0b4b8;
+}
+
+.title {
+  margin: 2px 0 4px;
+  font-size: 15px;
+}
+
+.pathField {
+  display: block;
+  padding: 2px 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  background: #c8d8dc;
+  border: 2px solid;
+  border-color: #5c6e72 #e8f2f4 #e8f2f4 #5c6e72;
+  overflow-wrap: anywhere;
+}
+
+.crumb {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.crumb:hover {
+  text-decoration: underline;
+}
+
+.separator {
+  color: #000;
+}
+
+.selectedName {
+  font-weight: bold;
+}
+
+.stats {
+  margin-top: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  white-space: pre;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* fsn's hovered-node path: bold white text at the top left of the 3D view, just under the header */
+.hoverPath {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin: 6px 0 0 8px;
+  font-weight: bold;
+  color: #fff;
+  pointer-events: none;
+  text-shadow: 0 0 3px #000, 0 0 3px #000;
+}
+
+@media (max-width: 768px), (max-height: 500px) {
+  .header {
+    right: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 3px 6px;
+    padding: 3px 6px 4px;
+    font-size: 11px;
+  }
+
+  .title {
+    display: none;
+  }
+
+  /* the ".." and bird's-eye buttons become direct flex items of the header row */
+  .menuRow {
+    display: contents;
+  }
+
+  .menuButton {
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .pathField {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex: 1 1 0;
+    min-width: 0;
+    font-size: 11px;
+  }
+
+  .pathField > span {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .crumb {
+    min-width: 36px;
+    min-height: 36px;
+    padding: 0 4px;
+  }
+
+  .selectedName {
+    padding: 0 4px;
+  }
+
+  .stats {
+    flex-basis: 100%;
+    margin-top: 0;
+    font-size: 11px;
+  }
+}
+
+/* Short landscape phones: one compact row, stats are dropped */
+@media (max-height: 500px) {
+  .stats {
+    display: none;
+  }
+}

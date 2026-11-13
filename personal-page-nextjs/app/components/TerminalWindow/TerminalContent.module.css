@@ -1,0 +1,45 @@
+.file {
+  width: 100%;
+  text-align: left;
+}
+
+.commandLine {
+  margin-bottom: 12px;
+}
+
+.prompt {
+  color: var(--color-green-primary);
+}
+
+.command {
+  color: var(--color-white);
+  word-break: break-all;
+}
+
+.body {
+  margin: 0 0 16px 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: inherit;
+  color: var(--color-green-primary);
+}
+
+.link {
+  display: block;
+  margin-bottom: 16px;
+  color: var(--color-cyan);
+  word-break: break-all;
+}
+
+.close {
+  font: inherit;
+  color: var(--color-green-primary);
+  background: none;
+  border: 1px solid var(--color-green-dark);
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: var(--color-cyan);
+}

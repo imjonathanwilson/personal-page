@@ -1,7 +1,23 @@
 'use client'
 
+import { Fragment } from 'react'
 import styles from './InfoContent.module.css'
 import TypedCommand from './TypedCommand'
+import { profile, projectNames, skillsText } from '../../content/fsTree'
+
+const projectsTree = [
+  'projects/',
+  ...projectNames.map(
+    (name, index) => `${index === projectNames.length - 1 ? '└──' : '├──'} ${name}`,
+  ),
+].join('\n')
+
+const skillsBlock = [
+  skillsText.languages,
+  skillsText.frameworks,
+  skillsText.cloud,
+  skillsText.other,
+].join('\n')
 
 export default function InfoContent() {
   return (
@@ -17,37 +33,23 @@ export default function InfoContent() {
 
       {/* Main info content */}
       <div>
-        <h1>Jonathan Wilson</h1>
-        <h2>Senior Site Reliability Engineer</h2>
+        <h1 className={styles.heading}>{profile.name}</h1>
+        <h2 className={styles.subtitle}>{profile.title}</h2>
 
         <div className={styles.contactInfo}>
-          <a
-            href="https://github.com/imjonathanwilson"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            github.com/imjonathanwilson
-          </a>
-          <span className={styles.separator}> | </span>
-          <a
-            href="https://linkedin.com/in/imjonathanwilson"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            linkedin.com/in/imjonathanwilson
-          </a>
+          {profile.links.map((entry, index) => (
+            <Fragment key={entry.href}>
+              {index > 0 && <span className={styles.separator}> | </span>}
+              <a href={entry.href} target="_blank" rel="noopener noreferrer">
+                {entry.label}
+              </a>
+            </Fragment>
+          ))}
         </div>
 
-        <p>
-          Senior Site Reliability Engineer with deep experience automating AWS
-          environments, improving system resilience, and supporting high-volume
-          production workloads.
-        </p>
-        <p>
-          Built scalable CI/CD pipelines and Terraform-driven infrastructure
-          while designing real-time observability using Datadog, CloudWatch,
-          and Grafana.
-        </p>
+        {profile.paragraphs.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
       </div>
 
       {/* Second command line - ls -la projects/ */}
@@ -56,11 +58,7 @@ export default function InfoContent() {
         <span className={styles.command}>ls -la projects/</span>
       </div>
       <div className={styles.terminalText}>
-{`projects/
-├── infrastructure-automation
-├── cloud-security-tools
-├── devops-pipelines
-└── monitoring-dashboard`}
+{projectsTree}
       </div>
 
       {/* Third command line - man skills */}
@@ -69,10 +67,7 @@ export default function InfoContent() {
         <span className={styles.command}>man skills</span>
       </div>
       <div className={styles.terminalText}>
-{`LANGUAGES: Python, JavaScript, TypeScript, Go, Rust
-FRAMEWORKS: React, Node.js, Express, Django
-CLOUD: AWS, Terraform, Docker, Kubernetes
-OTHER: CI/CD, Ansible, Monitoring`}
+{skillsBlock}
       </div>
     </div>
   )

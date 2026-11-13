@@ -1,0 +1,149 @@
+.group {
+  display: flex;
+  gap: 4px;
+  margin-right: 12px;
+}
+
+.help {
+  margin: 0 0 0 auto;
+}
+
+.menu {
+  position: relative;
+}
+
+.trigger {
+  font: inherit;
+  font-style: italic;
+  color: #000;
+  background: none;
+  border: 2px solid transparent;
+  padding: 1px 8px;
+  cursor: pointer;
+}
+
+.trigger:hover,
+.triggerOpen {
+  border-color: #e8f2f4 #5c6e72 #5c6e72 #e8f2f4;
+}
+
+.triggerOpen {
+  border-color: #5c6e72 #e8f2f4 #e8f2f4 #5c6e72;
+  background: #a0b4b8;
+}
+
+.list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 4;
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  padding: 2px;
+  background: #b4c8cc;
+  border: 2px solid;
+  border-color: #e8f2f4 #5c6e72 #5c6e72 #e8f2f4;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45);
+}
+
+.help .list {
+  left: auto;
+  right: 0;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font: inherit;
+  text-align: left;
+  color: #000;
+  background: none;
+  border: none;
+  padding: 3px 12px 3px 4px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.item:not(:disabled):hover,
+.item:focus-visible {
+  color: #fff;
+  background: #3c5c64;
+  outline: none;
+}
+
+.item:disabled {
+  color: #6c7c80;
+  cursor: default;
+}
+
+.check {
+  display: inline-block;
+  width: 1em;
+  text-align: center;
+}
+
+/* Above the menu catcher and the (raised) header */
+.catcher {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: transparent;
+}
+
+.aboutBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.about {
+  width: min(360px, calc(100vw - 32px));
+  padding: 8px 12px 12px;
+  font-family: Helvetica, Arial, 'Liberation Sans', sans-serif;
+  font-size: 13px;
+  color: #000;
+  background: #b4c8cc;
+  border: 2px solid;
+  border-color: #e8f2f4 #5c6e72 #5c6e72 #e8f2f4;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+.aboutTitle {
+  margin: -8px -12px 8px;
+  padding: 2px 8px;
+  font-weight: bold;
+  color: #fff;
+  background: #3c5c64;
+}
+
+.aboutText {
+  margin: 0 0 12px;
+  text-align: left;
+}
+
+.aboutClose {
+  font: inherit;
+  font-style: italic;
+  color: #000;
+  background: #b4c8cc;
+  padding: 2px 14px;
+  border: 2px solid;
+  border-color: #e8f2f4 #5c6e72 #5c6e72 #e8f2f4;
+  cursor: pointer;
+}
+
+.aboutClose:active {
+  border-color: #5c6e72 #e8f2f4 #e8f2f4 #5c6e72;
+}
+
+/* Mobile / short landscape: the compact header drops the menu words */
+@media (max-width: 768px), (max-height: 500px) {
+  .group {
+    display: none;
+  }
+}

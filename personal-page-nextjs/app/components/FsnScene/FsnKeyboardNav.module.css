@@ -1,0 +1,50 @@
+/* Visually hidden until it takes focus, then a small IRIX-styled list just below the header */
+.nav {
+  top: 0;
+  position: fixed;
+  left: 8px;
+  z-index: 4;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: #000;
+  background: #b4c8cc;
+  border: 2px solid;
+  border-color: #e8f2f4 #5c6e72 #5c6e72 #e8f2f4;
+  outline: none;
+}
+
+.nav:focus {
+  width: 280px;
+  max-width: calc(100vw - 16px);
+  height: auto;
+  max-height: 60dvh;
+  overflow-y: auto;
+  clip-path: none;
+  outline: 2px solid #ffd0e0;
+  outline-offset: 1px;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45);
+}
+
+.heading {
+  padding: 2px 6px;
+  font-style: italic;
+  background: #3c5c64;
+  color: #fff;
+}
+
+.option {
+  padding: 2px 8px;
+}
+
+.active {
+  background: #a0b4b8;
+}
+
+.nav:focus .active {
+  color: #fff;
+  background: #3c5c64;
+}

@@ -198,3 +198,5 @@ screenshots/
 
 # GitHub Actions
 .github/workflows/*.log
+# Playwright CLI output (may contain credentials)
+.playwright-cli/

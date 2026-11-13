@@ -1,14 +1,14 @@
 import TerminalWindow from "./components/TerminalWindow/TerminalWindow";
-import InfoContent from "./components/InfoContent/InfoContent";
-import ThreeScene from "./components/ThreeScene/ThreeScene";
+import TerminalContent from "./components/TerminalWindow/TerminalContent";
+import FsnSceneLoader, { FsnStoreProvider } from "./components/FsnScene";
 
 export default function Home() {
   return (
-    <>
-      <ThreeScene />
+    <FsnStoreProvider>
+      <FsnSceneLoader />
       <TerminalWindow>
-        <InfoContent />
+        <TerminalContent />
       </TerminalWindow>
-    </>
+    </FsnStoreProvider>
   );
 }

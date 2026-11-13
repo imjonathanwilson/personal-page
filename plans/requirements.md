@@ -1377,3 +1377,18 @@ The migration will be considered successful when ALL of the following criteria a
 **Last Updated:** 2026-01-01
 **Status:** Draft
 **Next Review Date:** Upon completion of migration
+
+---
+
+## Addendum (2026-11-12): fsn 3D File System Navigator
+
+Supersedes the "no new features / no visual design changes" scope items for the 3D scene only. Full spec: `openspec/changes/add-fsn-navigator/specs/fsn-navigator/spec.md`; plan: `plans/09-fsn-navigator/plan.md`.
+
+- FR-FSN-1: Site content is defined once in `app/content/fsTree.ts`; terminal and 3D scene both render from it.
+- FR-FSN-2: Directories render as pedestals, files as blocks (height ∝ size), parent→child wires, labels.
+- FR-FSN-3: Click pedestal to fly in; breadcrumb, back button and Escape to go up.
+- FR-FSN-4: Click file to show `cat <path>` + body in the terminal; `.lnk` opens href.
+- FR-FSN-5: Terminal is minimizable; scene is interactive.
+- NFR-FSN-1: three/R3F lazy-loaded, not in first-load JS.
+- NFR-FSN-2: Works without WebGL, honours `prefers-reduced-motion`, `NEXT_PUBLIC_FSN=0` kill switch.
+- NFR-FSN-3: Covered by `tests/e2e` Playwright specs (desktop + mobile).

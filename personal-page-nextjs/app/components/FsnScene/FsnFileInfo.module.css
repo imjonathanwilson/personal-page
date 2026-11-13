@@ -1,0 +1,22 @@
+.card {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  visibility: hidden;
+  pointer-events: none;
+  padding: 8px 12px;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--color-green-primary);
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid var(--color-green-dark);
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.name {
+  font-weight: bold;
+  color: var(--color-white);
+}
