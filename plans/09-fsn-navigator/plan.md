@@ -136,3 +136,8 @@ A `NEXT_PUBLIC_FSN=0` flag falls back to the terminal-only page.
 - **Rollback:**
   - `v2.1.0` tags the last pre-fsn production commit. To roll back, redeploy it with `git revert`, or reset `main` to it and push.
   - `NEXT_PUBLIC_FSN=0` at build time serves the terminal-only page.
+
+### v3.0.1: higher start view (2026-11-20)
+- The start view's pitch went from 17° to 34° (`ROOT_PITCH` in `CameraRig.tsx`), so the ground lettering ("skills" and the rest) reads at a glance. The portrait start view is unchanged at 40°.
+- The deploy role `github-actions-personal-page` gets `ssmmessages:OpenDataChannel` (`terraform-backend/main.tf`), for Session Manager's SigV4 data-channel requirement, enforced from 2027-05-28. This was already applied locally on 2026-11-20.
+- **Rollback:** redeploy `v3.0.0`.

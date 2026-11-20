@@ -226,3 +226,9 @@ The sources don't define the beam's geometry: fsnav has no spotlight, and fsn_ju
     - `project`: a magenta carpet with a gear and a lightning bolt, for names without an extension.
   - `FileBlock.tsx` lays an icon plane on each block's top face. It is 1.12× the block width, unlit, cut out with alpha-test, and ignored by raycasting.
 - **Tests:** a test in `fsn.spec.ts` ("fsn file icons") checks that every file in the tree maps to the right kind.
+
+## 2026-11-20: Higher start view (v3.0.1)
+
+- **The problem:** at the old 17° start pitch, the pedestal names lying on the ground were too foreshortened. The "s" in "skills" vanished, so it read as "kills".
+- **The fix:** the start pitch is now 34°. I compared screenshots at 28° and 34° at 1900×800, and 34° reads cleanly while still showing the whole tree. The trade-off is that the start view no longer shows the band of sky above the horizon.
+- **Also in this release:** the GitHub Actions deploy role gets `ssmmessages:OpenDataChannel`, ahead of AWS's Session Manager SigV4 change.

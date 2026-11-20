@@ -15,7 +15,7 @@ import { useIsMobile } from './useIsMobile'
 const DIRECTORY_PITCH = THREE.MathUtils.degToRad(55)
 const FILE_PITCH = THREE.MathUtils.degToRad(46)
 const OCCLUDED_PITCH = THREE.MathUtils.degToRad(55) // directory view with another pedestal in front
-const ROOT_PITCH = THREE.MathUtils.degToRad(17) // start view: the whole tree, with a band of sky above the horizon
+const ROOT_PITCH = THREE.MathUtils.degToRad(34) // start view: the whole tree, high enough that the lettering on the ground reads at once
 const ROOT_PITCH_PORTRAIT = THREE.MathUtils.degToRad(40) // the grid's back row would hide behind the front row at 17 degrees
 const ROOT_DROP = 0.2 // the start view sits lower in the free area, leaving ground between it and the horizon
 const BIRDSEYE_PITCH = THREE.MathUtils.degToRad(83) // near top-down

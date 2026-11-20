@@ -397,6 +397,14 @@ resource "aws_iam_role_policy" "github_actions" {
         ]
       },
       {
+        # Session Manager requires the client to open the data channel with a
+        # SigV4-signed, IAM-authorized OpenDataChannel call (enforced from 2027-05-28).
+        Sid      = "SsmOpenDataChannel"
+        Effect   = "Allow"
+        Action   = "ssmmessages:OpenDataChannel"
+        Resource = "arn:aws:ssm:${local.region}:${local.account_id}:session/*"
+      },
+      {
         Sid    = "SsmSessionLifecycle"
         Effect = "Allow"
         Action = [
